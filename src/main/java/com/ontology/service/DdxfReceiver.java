@@ -9,6 +9,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 
@@ -23,7 +24,7 @@ public class DdxfReceiver {
     private KafkaTemplate kafkaTemplate;
 
     @KafkaListener(topics = {"topic-events"},groupId = "group-ddxf-parse")
-    public void receiveMessage(ConsumerRecord<?, ?> record) {
+    public void receiveMessage(ConsumerRecord<?, ?> record, Acknowledgment ack) {
         log.info("ddxf-parse：{}", Thread.currentThread().getName());
         try {
             String value = (String) record.value();
@@ -48,6 +49,7 @@ public class DdxfReceiver {
                     }
                 }
             }
+            ack.acknowledge();
         } catch (Exception e) {
             e.printStackTrace();
         }

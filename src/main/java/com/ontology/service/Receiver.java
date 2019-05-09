@@ -8,6 +8,7 @@ import com.ontology.utils.Helper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 
@@ -20,12 +21,14 @@ public class Receiver {
     private String esType = "events";
 
     @KafkaListener(topics = {"topic-events"})
-    public void receiveMessage(ConsumerRecord<?, ?> record) {
+    public void receiveMessage(ConsumerRecord<?, ?> record, Acknowledgment ack) {
         log.info("common-parse：{}", Thread.currentThread().getName());
         try {
             String value = (String) record.value();
             JSONObject data = JSONObject.parseObject(value);
             int i = (int) data.get("height");
+            log.info("height:{}",i);
+
             Object events = data.get("events");
             if (Helper.isEmptyOrNull(events)) {
                 return;
@@ -66,6 +69,7 @@ public class Receiver {
                     ElasticsearchUtil.addData(map,indexName,esType);
                 }
             }
+            ack.acknowledge();
         } catch (Exception e) {
             e.printStackTrace();
         }
