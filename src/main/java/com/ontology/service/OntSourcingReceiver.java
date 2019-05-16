@@ -1,6 +1,5 @@
 package com.ontology.service;
 
-import com.ontology.utils.ConfigParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,20 +10,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class DdxfReceiver {
+public class OntSourcingReceiver {
 
-    @Autowired
-    private ConfigParam configParam;
     @Autowired
     private ProducerService producerService;
+    private String contractHash = "e2510ed1044503faf6e3e66b98372606bbeae38f";
+    private String topic = "ont_sourcing_2c_e2510e";
 
-    private String topic = "topic-ddxf";
-
-    @KafkaListener(topics = {"topic-all-events"}, groupId = "group-ddxf-parse")
+    @KafkaListener(topics = {"topic-all-events"}, groupId = "ont_sourcing_2c_e2510e")
     public void receiveMessage(ConsumerRecord<?, ?> record, Acknowledgment ack) {
-        log.info("ddxf-parse：{}", Thread.currentThread().getName());
+        log.info("ont_sourcing_2c_e2510e：{}", Thread.currentThread().getName());
         String value = (String) record.value();
-        producerService.parseAndSend(value,configParam.CONTRACT_HASH,topic);
+        producerService.parseAndSend(value,contractHash,topic);
         ack.acknowledge();
     }
 }
