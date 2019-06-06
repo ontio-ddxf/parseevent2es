@@ -37,4 +37,23 @@ public class ProducerServiceImpl implements ProducerService {
         }
     }
 
+    @Override
+    public void parseAndSendOne(String value, String contractHash, String topic) {
+        JSONObject data = JSONObject.parseObject(value);
+        JSONObject events = JSONObject.parseObject(data.getString("events"));
+        if (Helper.isEmptyOrNull(events)) {
+            return;
+        }
+        JSONArray notifys = events.getJSONArray("Notify");
+
+        for (int k = 0; k < notifys.size(); k++) {
+            JSONObject notify = notifys.getJSONObject(k);
+            String contractAddress = notify.getString("ContractAddress");
+            if (contractHash.equals(contractAddress)) {
+                kafkaTemplate.send(topic, events.toJSONString());
+                break;
+            }
+        }
+    }
+
 }
