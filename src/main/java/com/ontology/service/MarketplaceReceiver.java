@@ -19,7 +19,7 @@ public class MarketplaceReceiver {
     private ProducerService producerService;
 
     private String topic = "topic-marketplace";
-    private String contractHash = "3da0998e1e759aaed78b41ce1f92151d7b3f1083";
+    private String contractHash = "88da35324f1133aca1f3b728b27fa1f017e6fb8c";
 
     @KafkaListener(topics = {"topic-test-event"}, groupId = "group-marketplace-parse")
     public void receiveMessage(ConsumerRecord<?, ?> record, Acknowledgment ack) {

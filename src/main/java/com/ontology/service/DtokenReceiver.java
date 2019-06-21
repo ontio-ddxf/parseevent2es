@@ -19,7 +19,7 @@ public class DtokenReceiver {
     private ProducerService producerService;
 
     private String topic = "topic-dtoken";
-    private String contractHash = "0f0929b514ddf62522a8a335b588321b2e7725bc";
+    private String contractHash = "06633f64506fbf7fd4b65b422224905d362d1f55";
 
     @KafkaListener(topics = {"topic-test-event"}, groupId = "group-dtoken-parse")
     public void receiveMessage(ConsumerRecord<?, ?> record, Acknowledgment ack) {
