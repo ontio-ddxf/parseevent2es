@@ -19,5 +19,13 @@ public class ConfigParam {
 	@Value("${contract.hash}")
 	public String CONTRACT_HASH;
 
+	@Value("${contract.hash.mp.auth}")
+	public String CONTRACT_HASH_MP_AUTH;
+
+	@Value("${contract.hash.mp}")
+	public String CONTRACT_HASH_MP;
+
+	@Value("${contract.hash.dtoken}")
+	public String CONTRACT_HASH_DTOKEN;
 
 }

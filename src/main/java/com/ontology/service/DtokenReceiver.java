@@ -18,14 +18,13 @@ public class DtokenReceiver {
     @Autowired
     private ProducerService producerService;
 
-    private String topic = "topic-dtoken";
-    private String contractHash = "06633f64506fbf7fd4b65b422224905d362d1f55";
+    private static String topic = "topic-dtoken";
 
     @KafkaListener(topics = {"topic-test-event"}, groupId = "group-dtoken-parse")
     public void receiveMessage(ConsumerRecord<?, ?> record, Acknowledgment ack) {
         log.info("dtokenreceiveMessage");
         String value = (String) record.value();
-        producerService.parseAndSendOne(value,contractHash,topic);
+        producerService.parseAndSendOne(value,configParam.CONTRACT_HASH_DTOKEN,topic);
         ack.acknowledge();
     }
 }

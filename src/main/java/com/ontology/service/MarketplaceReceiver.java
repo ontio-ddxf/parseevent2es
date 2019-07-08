@@ -18,14 +18,13 @@ public class MarketplaceReceiver {
     @Autowired
     private ProducerService producerService;
 
-    private String topic = "topic-marketplace";
-    private String contractHash = "88da35324f1133aca1f3b728b27fa1f017e6fb8c";
+    private static String topic = "topic-marketplace";
 
     @KafkaListener(topics = {"topic-test-event"}, groupId = "group-marketplace-parse")
     public void receiveMessage(ConsumerRecord<?, ?> record, Acknowledgment ack) {
         log.info("marketplace-receive");
         String value = (String) record.value();
-        producerService.parseAndSendOne(value,contractHash,topic);
+        producerService.parseAndSendOne(value,configParam.CONTRACT_HASH_MP,topic);
         ack.acknowledge();
     }
 }
