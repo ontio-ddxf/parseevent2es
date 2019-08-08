@@ -12,6 +12,7 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
@@ -85,6 +86,7 @@ public class Receiver {
             if (!Helper.isEmptyOrNull(events)) {
                 String txHash = events.getString("TxHash");
                 JSONArray notifys = events.getJSONArray("Notify");
+                String dateTime = JSON.toJSONStringWithDateFormat(new Date(), "yyyy-MM-dd HH:mm:ss").replace("\"","");
 
                 for (int k = 0; k < notifys.size(); k++) {
                     Map<String, Object> map = new LinkedHashMap<>();
@@ -94,6 +96,7 @@ public class Receiver {
                     map.put("txHash", txHash);
                     map.put("contractAddress", contractAddress);
                     map.put("blockHeight", i);
+                    map.put("createdTime", dateTime);
                     map.put("event", events.toJSONString());
 
                     Object statesObj = notify.get("States");
